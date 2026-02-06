@@ -20,23 +20,46 @@
 
 ## ✨ Key Features
 
-### 🧪 Drug-Protein Binding Prediction
-- Predict binding affinity (pK) from SMILES and FASTA sequences
-- AI-powered molecule and protein sequence generation
-- Real-time validation and error feedback
-- Confidence scoring with uncertainty estimation
+### 🎯 Smart Binding Prediction
+- Predict drug-protein binding affinity (pK values)
+- Input drug molecules via SMILES notation
+- Input protein targets via FASTA sequences
+- Real-time validation and AI-powered predictions
+- Confidence scores and detailed interpretations
+
+### 📊 Batch Processing
+- Upload CSV/Excel files with multiple drug-protein pairs
+- Process 100+ predictions simultaneously
+- Real-time progress tracking with ETA
+- Priority queue for urgent predictions
+- Export results as CSV or Excel
+- Automatic integration with prediction history
+
+### 📜 Prediction History & Analytics
+- Track, filter, and analyze all past predictions
+- Interactive timeline view with date grouping
+- Trend analytics charts (pK over time, source distribution)
+- Export full history as JSON
+- Manage favorites and add notes to predictions
 
 ### 🧠 AI Explainability
-- **SHAP Analysis**: Atom-level importance scores for drug molecules
-- **Attention Heatmaps**: Residue-level attention weights for proteins
-- **3D Visualization**: Interactive molecular and protein structure viewers
-- **Binding Site Prediction**: Identify key interaction regions
+- SHAP-based atom importance visualization
+- Protein residue contribution analysis
+- 3D molecular structure viewer
+- Attention heatmaps for model interpretability
 
-### 📊 Model Performance Analytics
-- Compare baseline (Random Forest) vs deep learning models
-- Comprehensive metrics: RMSE, MAE, Pearson R, R²
-- Training dynamics and learning curves
-- Performance breakdown by affinity range and protein family
+### 🧪 Drug-Likeness Calculator
+- Evaluate compounds against Lipinski's Rule of 5
+- Calculate QED (Quantitative Estimate of Drug-likeness) scores
+- Visualize molecular properties with radar charts
+- Predict ADMET profile (Absorption, Toxicity, etc.)
+- Detailed PDF report generation
+
+### 📈 Model Performance Analytics
+- Compare baseline vs deep learning models
+- Interactive performance charts (RMSE, MAE, Pearson R, R²)
+- Training/validation metrics visualization
+- Model architecture diagrams
 
 ### 🗄️ Dataset Explorer
 - Browse 10,000 curated drug-protein pairs
@@ -169,6 +192,8 @@ binding-insight-ai/
 |-------|------|-------------|
 | `/` | Landing | Platform overview and key features |
 | `/prediction` | Prediction | Drug-protein binding prediction interface |
+| `/history` | History | Prediction timeline, analytics, and management |
+| `/drug-likeness` | Drug Likeness | Molecular property analysis and rule evaluation |
 | `/explainability` | Explainability | AI model interpretability and visualization |
 | `/performance` | Performance | Model comparison and analytics |
 | `/dataset` | Dataset | Explore training datasets |

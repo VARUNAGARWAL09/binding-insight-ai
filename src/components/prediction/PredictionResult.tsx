@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-import { Activity, Shield, Download, Brain, FileText, AlertCircle, CheckCircle2, Pill, Star } from "lucide-react";
+﻿import { Activity, Shield, Download, Brain, FileText, AlertCircle, CheckCircle2, Pill, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { PredictionResponse } from "@/lib/api";
@@ -7,12 +6,6 @@ import { generatePredictionPDF } from "@/lib/pdfGenerator";
 import { calculateDrugLikeness, getDrugLikenessColor } from "@/lib/drugLikenessCalculator";
 import { useFavorites } from "@/hooks/useFavorites";
 import { GlossaryTooltip } from "@/components/GlossaryTooltip";
-=======
-import { Activity, Shield, Download, Brain, FileText } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { PredictionResponse } from "@/lib/api";
-import { generatePredictionPDF } from "@/lib/pdfGenerator";
->>>>>>> 9cb20a1c50a704bff26d22157d55c875389fbebe
 import { toast } from "sonner";
 
 interface PredictionResultProps {
@@ -39,8 +32,7 @@ export function PredictionResult({ result, smiles, fasta, onViewExplainability }
   const affinityCategory = getAffinityCategory(result.binding_affinity_pk);
   const confidenceLevel = getConfidenceLevel(result.confidence_score);
 
-<<<<<<< HEAD
-  // Calculate confidence interval (±1 standard deviation)
+  // Calculate confidence interval (┬▒1 standard deviation)
   const confidenceInterval = 0.15; // Fixed interval for demonstration
   const lowerBound = result.binding_affinity_pk - confidenceInterval;
   const upperBound = result.binding_affinity_pk + confidenceInterval;
@@ -68,8 +60,6 @@ export function PredictionResult({ result, smiles, fasta, onViewExplainability }
     }
   };
 
-=======
->>>>>>> 9cb20a1c50a704bff26d22157d55c875389fbebe
   const handleDownloadPDF = () => {
     try {
       generatePredictionPDF({
@@ -104,11 +94,7 @@ export function PredictionResult({ result, smiles, fasta, onViewExplainability }
     a.download = `prediction_${result.prediction_id}.json`;
     a.click();
     URL.revokeObjectURL(url);
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> 9cb20a1c50a704bff26d22157d55c875389fbebe
     toast.success('JSON report downloaded!');
   };
 
@@ -134,9 +120,8 @@ export function PredictionResult({ result, smiles, fasta, onViewExplainability }
             </span>
             <span className="text-lg text-muted-foreground">pK</span>
           </div>
-<<<<<<< HEAD
           <div className="text-xs text-muted-foreground">
-            95% CI: {lowerBound.toFixed(2)} – {upperBound.toFixed(2)}
+            95% CI: {lowerBound.toFixed(2)} ΓÇô {upperBound.toFixed(2)}
           </div>
           <div className={`status-badge ${affinityCategory.label === 'Very High' || affinityCategory.label === 'High'
             ? 'status-badge-success'
@@ -144,15 +129,6 @@ export function PredictionResult({ result, smiles, fasta, onViewExplainability }
               ? 'status-badge-warning'
               : 'status-badge-error'
             }`}>
-=======
-          <div className={`status-badge ${
-            affinityCategory.label === 'Very High' || affinityCategory.label === 'High' 
-              ? 'status-badge-success' 
-              : affinityCategory.label === 'Moderate' 
-                ? 'status-badge-warning' 
-                : 'status-badge-error'
-          }`}>
->>>>>>> 9cb20a1c50a704bff26d22157d55c875389fbebe
             {affinityCategory.label} Affinity
           </div>
         </div>
@@ -161,13 +137,9 @@ export function PredictionResult({ result, smiles, fasta, onViewExplainability }
         <div className="space-y-3 p-4 rounded-xl bg-gradient-to-br from-success/5 to-success/10 border border-success/20">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Shield className="h-4 w-4 text-success" />
-<<<<<<< HEAD
             <GlossaryTooltip term="confidence score">
               <span>Confidence Score</span>
             </GlossaryTooltip>
-=======
-            <span>Confidence Score</span>
->>>>>>> 9cb20a1c50a704bff26d22157d55c875389fbebe
           </div>
           <div className="flex items-baseline gap-2">
             <span className="text-4xl font-bold text-foreground">
@@ -177,11 +149,7 @@ export function PredictionResult({ result, smiles, fasta, onViewExplainability }
           </div>
           <div className="space-y-2">
             <div className="progress-scientific">
-<<<<<<< HEAD
               <div
-=======
-              <div 
->>>>>>> 9cb20a1c50a704bff26d22157d55c875389fbebe
                 className={`progress-scientific-fill ${confidenceLevel.color}`}
                 style={{ width: `${result.confidence_score * 100}%` }}
               />
@@ -193,7 +161,6 @@ export function PredictionResult({ result, smiles, fasta, onViewExplainability }
         </div>
       </div>
 
-<<<<<<< HEAD
       {/* Drug-Likeness Analysis */}
       <div className="rounded-xl bg-gradient-to-br from-accent/5 to-accent/10 p-4 space-y-3 border border-accent/20">
         <div className="flex items-center justify-between flex-wrap gap-2">
@@ -254,7 +221,7 @@ export function PredictionResult({ result, smiles, fasta, onViewExplainability }
               <div className="text-xs">
                 <span className="text-muted-foreground">PSA:</span>
                 <span className="ml-1 font-mono font-semibold">
-                  {drugLikeness.properties.polarSurfaceArea.toFixed(1)} Ų
+                  {drugLikeness.properties.polarSurfaceArea.toFixed(1)} ┼▓
                 </span>
               </div>
             </div>
@@ -269,19 +236,12 @@ export function PredictionResult({ result, smiles, fasta, onViewExplainability }
         )}
       </div>
 
-=======
->>>>>>> 9cb20a1c50a704bff26d22157d55c875389fbebe
       {/* Interpretation */}
       <div className="rounded-xl bg-muted/50 p-4 space-y-2 border border-border">
         <h4 className="text-sm font-medium text-foreground">Interpretation</h4>
         <p className="text-sm text-muted-foreground">
-<<<<<<< HEAD
           The predicted binding affinity of <strong className="text-foreground">{result.binding_affinity_pk.toFixed(2)} pK</strong> indicates
           {affinityCategory.label === 'Very High' || affinityCategory.label === 'High'
-=======
-          The predicted binding affinity of <strong className="text-foreground">{result.binding_affinity_pk.toFixed(2)} pK</strong> indicates 
-          {affinityCategory.label === 'Very High' || affinityCategory.label === 'High' 
->>>>>>> 9cb20a1c50a704bff26d22157d55c875389fbebe
             ? ' a strong potential interaction between the drug and protein target. This compound may be a promising candidate for further investigation.'
             : affinityCategory.label === 'Moderate'
               ? ' a moderate interaction potential. Additional modifications may improve binding characteristics.'
@@ -292,20 +252,14 @@ export function PredictionResult({ result, smiles, fasta, onViewExplainability }
 
       {/* Actions */}
       <div className="flex gap-3 pt-2 flex-wrap">
-<<<<<<< HEAD
         <Button
           variant="scientific"
-=======
-        <Button 
-          variant="scientific" 
->>>>>>> 9cb20a1c50a704bff26d22157d55c875389fbebe
           onClick={onViewExplainability}
           className="flex-1 min-w-[180px]"
         >
           <Brain className="h-4 w-4 mr-2" />
           View Explainability
         </Button>
-<<<<<<< HEAD
         <Button
           variant={favoriteExists ? "default" : "outline"}
           onClick={handleToggleFavorite}
@@ -316,36 +270,21 @@ export function PredictionResult({ result, smiles, fasta, onViewExplainability }
         </Button>
         <Button
           variant="outline"
-=======
-        <Button 
-          variant="outline" 
->>>>>>> 9cb20a1c50a704bff26d22157d55c875389fbebe
           onClick={handleDownloadPDF}
           className="min-w-[140px]"
         >
           <FileText className="h-4 w-4 mr-2" />
           PDF Report
         </Button>
-<<<<<<< HEAD
         <Button
           variant="ghost"
-=======
-        <Button 
-          variant="ghost" 
->>>>>>> 9cb20a1c50a704bff26d22157d55c875389fbebe
           onClick={handleDownloadJSON}
         >
           <Download className="h-4 w-4 mr-2" />
           JSON
         </Button>
       </div>
-<<<<<<< HEAD
     </div >
   );
 }
 
-=======
-    </div>
-  );
-}
->>>>>>> 9cb20a1c50a704bff26d22157d55c875389fbebe

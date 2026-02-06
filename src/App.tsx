@@ -6,7 +6,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import Index from "./pages/Index";
 import Prediction from "./pages/Prediction";
+import BatchPrediction from "./pages/BatchPrediction";
+import History from "./pages/History";
 import Explainability from "./pages/Explainability";
+import DrugLikeness from "./pages/DrugLikeness";
 import Performance from "./pages/Performance";
 import Dataset from "./pages/Dataset";
 import Documentation from "./pages/Documentation";
@@ -28,7 +31,10 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/prediction" element={<Prediction />} />
+              <Route path="/batch-prediction" element={<BatchPrediction />} />
+              <Route path="/history" element={<History />} />
               <Route path="/explainability" element={<Explainability />} />
+              <Route path="/drug-likeness" element={<DrugLikeness />} />
               <Route path="/performance" element={<Performance />} />
               <Route path="/dataset" element={<Dataset />} />
               <Route path="/documentation" element={<Documentation />} />

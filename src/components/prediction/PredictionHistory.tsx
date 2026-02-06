@@ -3,21 +3,23 @@ import { Clock, ChevronRight, Loader2, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { getPredictionHistory, StoredPrediction } from "@/lib/api";
+import { getPredictions } from "@/lib/historyStorage";
+import { PredictionRecord } from "@/types/historyTypes";
 import { toast } from "sonner";
+import { StoredPrediction } from "@/lib/api";
 
 interface PredictionHistoryProps {
   onSelect: (prediction: StoredPrediction) => void;
 }
 
 export function PredictionHistory({ onSelect }: PredictionHistoryProps) {
-  const [predictions, setPredictions] = useState<StoredPrediction[]>([]);
+  const [predictions, setPredictions] = useState<PredictionRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchHistory = async () => {
     setIsLoading(true);
     try {
-      const data = await getPredictionHistory();
+      const data = await getPredictions();
       setPredictions(data);
     } catch (error) {
       console.error("Failed to fetch history:", error);
@@ -31,8 +33,8 @@ export function PredictionHistory({ onSelect }: PredictionHistoryProps) {
     fetchHistory();
   }, []);
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString('en-US', {
+  const formatDate = (timestamp: number) => {
+    return new Date(timestamp).toLocaleString('en-US', {
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
@@ -41,10 +43,27 @@ export function PredictionHistory({ onSelect }: PredictionHistoryProps) {
   };
 
   const getAffinityColor = (pk: number) => {
-    if (pk >= 9) return "text-success";
+    if (pk >= 9) return "text-green-500";
     if (pk >= 7) return "text-primary";
-    if (pk >= 5) return "text-warning";
+    if (pk >= 5) return "text-yellow-500";
     return "text-destructive";
+  };
+
+  const handleSelect = (record: PredictionRecord) => {
+    // Convert PredictionRecord to StoredPrediction for compatibility
+    const storedPrediction: StoredPrediction = {
+      id: record.id,
+      smiles: record.smiles,
+      fasta: record.fasta,
+      predicted_pk: record.predictedPk,
+      confidence_score: record.confidenceScore,
+      atom_importance: null, // History might not save full importance data yet
+      residue_importance: null,
+      drug_name: record.drugName,
+      protein_name: record.proteinName,
+      created_at: new Date(record.timestamp).toISOString()
+    };
+    onSelect(storedPrediction);
   };
 
   if (isLoading) {
@@ -84,27 +103,27 @@ export function PredictionHistory({ onSelect }: PredictionHistoryProps) {
           <RefreshCw className="h-4 w-4" />
         </Button>
       </div>
-      
+
       <ScrollArea className="h-[300px]">
         <div className="space-y-2">
           {predictions.map((prediction) => (
             <button
               key={prediction.id}
-              onClick={() => onSelect(prediction)}
+              onClick={() => handleSelect(prediction)}
               className="w-full p-3 rounded-lg border border-border hover:border-primary/50 hover:bg-muted/50 transition-all text-left group"
             >
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
-                  <span className={`font-mono font-bold ${getAffinityColor(prediction.predicted_pk)}`}>
-                    {prediction.predicted_pk.toFixed(2)} pK
+                  <span className={`font-mono font-bold ${getAffinityColor(prediction.predictedPk)}`}>
+                    {prediction.predictedPk.toFixed(2)} pK
                   </span>
                   <span className="text-xs text-muted-foreground">
-                    ({(prediction.confidence_score * 100).toFixed(0)}% conf.)
+                    ({(prediction.confidenceScore * 100).toFixed(0)}% conf.)
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-muted-foreground">
-                    {formatDate(prediction.created_at)}
+                    {formatDate(prediction.timestamp)}
                   </span>
                   <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
                 </div>
@@ -112,11 +131,11 @@ export function PredictionHistory({ onSelect }: PredictionHistoryProps) {
               <div className="grid grid-cols-2 gap-2 text-xs">
                 <div className="truncate">
                   <span className="text-muted-foreground">Drug: </span>
-                  <span className="font-mono">{prediction.drug_name || prediction.smiles.slice(0, 20)}...</span>
+                  <span className="font-mono">{prediction.drugName || prediction.smiles.slice(0, 20)}...</span>
                 </div>
                 <div className="truncate">
                   <span className="text-muted-foreground">Protein: </span>
-                  <span className="font-mono">{prediction.protein_name || prediction.fasta.slice(0, 15)}...</span>
+                  <span className="font-mono">{prediction.proteinName || prediction.fasta.slice(0, 15)}...</span>
                 </div>
               </div>
             </button>

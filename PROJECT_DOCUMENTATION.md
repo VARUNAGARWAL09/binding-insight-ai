@@ -8,10 +8,14 @@
 5. [Components](#components)
 6. [Data & Models](#data--models)
 7. [Configuration](#configuration)
-8. [Setup & Installation](#setup--installation)
-9. [Running the Project](#running-the-project)
-10. [Dependencies](#dependencies)
-11. [Architecture](#architecture)
+6. [Explainability](explainability-page)
+7. [Performance](performance-page)
+8. [Dataset](dataset-pages)
+9. [Configuration](#configuration)
+10. [Setup & Installation](#setup--installation)
+11. [Running the Project](#running-the-project)
+12. [Dependencies](#dependencies)
+13. [Architecture](#architecture)
 
 ---
 
@@ -264,7 +268,390 @@ Displays after successful prediction:
 
 ---
 
-### 3. **Explainability Page** (`Explainability.tsx`) - AI Explainability
+### 3. **Batch Prediction Page** (`BatchPrediction.tsx`) - Bulk Processing
+**URL**: `/batch-prediction`
+
+Process multiple drug-protein pairs simultaneously with CSV/Excel file upload:
+
+#### Header Section
+- **Icon**: Layers icon in primary color background
+- **Title**: "Batch Prediction"
+- **Description**: "Process multiple drug-protein pairs in bulk"
+
+#### File Upload Component (`BatchFileUpload`)
+**Drag-and-Drop Zone**:
+- Visual upload area with dashed border
+- Hover effect (border changes to primary color)
+- Upload icon and instructional text
+- Supported formats: CSV, Excel (.xlsx, .xls)
+
+**Buttons**:
+- **"Download Template"**: Downloads sample CSV with correct format
+- **"Choose File"**: Opens file browser
+
+**Required Columns Documentation**:
+- `drug_name`: Name of the drug compound
+- `smiles`: SMILES notation of the drug
+- `protein_name`: Name of the target protein
+- `fasta`: Protein sequence (30-10,000 amino acids)
+- `priority` (optional): true/false for priority processing
+
+**File Validation**:
+- Column presence check
+- SMILES format validation (chemical notation)
+- FASTA sequence validation (amino acid letters only)
+- Sequence length validation (30-10,000 AA)
+- Detailed error and warning messages
+
+#### Parsed Data Summary
+After successful file upload:
+- **Success Alert**: Shows number of parsed drug-protein pairs
+- **Warning Alert**: Lists validation warnings with details
+  - Displays first 10 warnings
+  - Shows total count if more than 10
+  - Scrollable warning list
+
+#### Priority Mode Section
+**Checkbox**:
+- **Label**: "Priority Mode"
+- **Description**: "Process all items with high priority (urgent processing)"
+- **Effect**: Marks all items for priority processing
+
+**Start Button**:
+- **Text**: "Start Batch Processing (X items)"
+- **Size**: Large
+- **Icon**: Layers icon
+- **Disabled**: When no data is loaded
+
+#### Progress Tracker (`BatchProgressTracker`)
+Displays during and after processing:
+
+**Progress Bar**:
+- Overall completion percentage (0-100%)
+- Visual progress indicator
+- Completed/Total count display
+- ETA (Estimated Time Remaining) in seconds/minutes
+
+**Status Cards** (3 cards):
+1. **Processing**:
+   - Icon: Spinning loader (during processing) or checkmark (when done)
+   - Count: Items still being processed
+   - Color: Muted
+
+2. **Successful**:
+   - Icon: Green checkmark
+   - Count: Successfully predicted items
+   - Color: Green background
+
+3. **Failed**:
+   - Icon: Red X circle
+   - Count: Failed predictions
+   - Color: Red background
+
+**Current Item Display**:
+- Shows name of drug currently being processed
+- Highlighted in primary color background
+
+**Cancel Button**:
+- Visible only during processing
+- Stops batch processing immediately
+
+#### Results Table (`BatchResultsTable`)
+Displays after processing completes:
+
+**Header**:
+- Title: "Batch Results"
+- Count: "X of Y results" (filtered/total)
+- **Export Buttons**:
+  - "Export CSV": Downloads results as CSV
+  - "Export Excel": Downloads results as .xlsx
+
+**Search Bar**:
+- Search icon
+- Placeholder: "Search by drug, protein, or status..."
+- Real-time filtering
+
+**Table Columns** (all sortable):
+1. **Drug**: Drug name (click to sort)
+2. **Protein**: Protein name (click to sort)
+3. **Predicted pK**: Binding affinity value (2 decimal places)
+4. **Confidence**: Percentage (1 decimal place)
+5. **Status**: Color-coded badge
+   - Pending: Gray
+   - Processing: Blue
+   - Success: Green
+   - Failed: Red
+
+**Table Features**:
+- Sortable columns (ascending/descending)
+- Search/filter functionality
+- Max height with scroll (500px)
+- Sticky header
+- Hover effects on rows
+
+**Empty State**:
+- Message: "No results found" (when search returns nothing)
+
+#### Action Buttons
+After results are displayed:
+- **"Process Another Batch"**: Resets the page for new upload
+- **"Back to Single Prediction"**: Navigates to `/prediction`
+
+#### Technical Features
+- **Batch Size**: Supports 100+ drug-protein pairs per upload
+- **Processing**: 5 concurrent predictions at a time
+- **Priority Queue**: Items marked as priority processed first
+- **History Integration**: Successful predictions saved to localStorage
+- **Error Handling**: Individual failures don't stop the batch
+- **Export Formats**: CSV and Excel with full data
+
+#### Workflow
+1. User uploads CSV/Excel file
+2. System validates all rows
+3. Warnings displayed for invalid rows
+4. User optionally enables Priority Mode
+5. User clicks "Start Batch Processing"
+6. Progress bar shows real-time updates
+7. Results table populates as predictions complete
+8. User can sort, search, and export results
+9. Successful predictions saved to history
+
+---
+
+### 4. **History & Analytics Page** (`History.tsx`) - Prediction Tracking & Analysis
+**URL**: `/history`
+
+Comprehensive dashboard for tracking, analyzing, and managing all predictions with advanced filtering and visualization:
+
+#### Header Section
+- **Title**: "Prediction History & Analytics"
+- **Description**: "Track, analyze, and manage all your predictions"
+- **Action Buttons**:
+  - **"Export All"**: Downloads all predictions as JSON
+  - **"Clear All"**: Deletes all history (with confirmation)
+
+#### Summary Cards Section
+Four key metric cards displayed in a responsive grid:
+1. **Total Predictions**
+   - Icon: Activity (primary color)
+   - Value: Total count of all predictions
+   
+2. **Average pK**
+   - Icon: TrendingUp (success color)
+   - Value: Mean binding affinity across all predictions
+   
+3. **Avg Confidence**
+   - Icon: Target (accent color)
+   - Value: Mean confidence score as percentage
+   
+4. **Top Protein**
+   - Icon: Beaker (warning color)
+   - Value: Most frequently tested protein name
+
+#### Tab Navigation
+Two main views accessible via tabs:
+1. **Timeline**: Chronological list of predictions
+2. **Analytics**: Charts and visualizations
+
+#### Timeline Tab
+
+**Search & Filters**:
+- **Search Bar**: Real-time search across:
+  - Drug names
+  - Protein names
+  - SMILES notation
+  - Notes content
+- **Favorites Filter**: Toggle to show only starred predictions
+
+**Date-Grouped Timeline**:
+Predictions organized into groups:
+- **Today**: Predictions from current day
+- **Yesterday**: Predictions from previous day
+- **This Week**: Predictions from current week
+- **[Month Year]**: Older predictions grouped by month
+
+**Prediction Cards** (`PredictionCard` component):
+Each card displays:
+- **Badge**: Source type (Single/Batch)
+- **Timestamp**: Relative time (e.g., "2 hours ago")
+- **Drug Name**: Truncated if long
+- **Protein Name**: Truncated if long
+- **pK Value**: Color-coded by affinity level
+  - Green: High affinity (pK ≥ 7)
+  - Yellow: Moderate (pK 5-7)
+  - Red: Low (pK < 5)
+- **Confidence Score**: Percentage display
+- **Notes Indicator**: Shows if notes exist
+
+**Quick Actions** (Icon buttons):
+- **Star**: Toggle favorite status
+- **Message**: Add/edit notes
+- **Eye**: View details (coming soon)
+- **Trash**: Delete prediction (with confirmation)
+
+#### Analytics Tab
+
+**Predictions Over Time Chart**:
+- **Type**: Bar chart
+- **Data**: Last 30 days of predictions
+- **X-Axis**: Dates (MMM DD format)
+- **Y-Axis**: Number of predictions
+- **Color**: Primary theme color
+- **Interactive**: Hover tooltips
+
+**Source Distribution Card**:
+- **Single Predictions**: Progress bar showing percentage
+- **Batch Predictions**: Progress bar showing percentage
+- **Colors**: Primary (single), Accent (batch)
+
+**Key Metrics Card**:
+Summary of important statistics:
+- Average pK (large display)
+- Average Confidence (large display)
+- Total Predictions (large display)
+
+#### Database & Storage
+
+**Technology**: IndexedDB via Dexie.js
+- **Unlimited Storage**: No localStorage 5MB limit
+- **Fast Queries**: Indexed fields for performance
+- **Auto-Migration**: Migrates from localStorage on first load
+
+**Schema** (`PredictionRecord`):
+```typescript
+{
+  id: string;                    // UUID
+  timestamp: number;              // Unix timestamp
+  source: 'single' | 'batch';
+  drugName: string;
+  smiles: string;
+  proteinName: string;
+  fasta: string;
+  predictedPk: number;
+  confidenceScore: number;
+  drugLikenessScore?: number;    // Future use
+  isFavorite: boolean;
+  notes: string;
+  tags: string[];                // Future use
+}
+```
+
+#### Features
+
+**Automatic Saving**:
+- Single predictions auto-saved after completion
+- Batch predictions auto-saved individually
+- No manual save required
+
+**Search & Filter**:
+- Real-time text search
+- Date range filtering (future)
+- pK range filtering (future)
+- Confidence filtering (future)
+- Source type filtering
+- Favorites-only view
+
+**Data Management**:
+- Toggle favorite status
+- Add/edit notes per prediction
+- Delete individual predictions
+- Bulk export as JSON
+- Clear all history
+
+**Export Functionality**:
+- JSON format with full data
+- Timestamped filename
+- Includes all metadata
+- Backup and analysis ready
+
+#### Workflow
+1. User makes predictions (single or batch)
+2. Predictions automatically saved to IndexedDB
+3. User navigates to History & Analytics
+4. View summary statistics in cards
+5. Browse timeline or view analytics charts
+6. Search/filter to find specific predictions
+7. Manage favorites and notes
+8. Export data for external analysis
+
+#### Empty States
+- **No Predictions**: Helpful message with suggestions
+- **No Search Results**: Clear feedback about filters
+- **Loading State**: Skeleton cards during data fetch
+
+#### Performance
+- Handles 1000+ predictions smoothly
+- Search/filter response < 100ms
+- Lazy loading for large datasets
+- Optimized queries with indexes
+
+---
+
+### 5. **Drug-Likeness Calculator** (`DrugLikeness.tsx`) - Molecular Property Analysis
+**URL**: `/drug-likeness`
+
+Evaluate drug candidates against established medicinal chemistry rules to assess their pharmaceutical potential:
+
+#### Header Section
+- **Title**: "Drug Likeness Calculator"
+- **Description**: "Evaluate drug candidates against Lipinski's Rule of 5, Ghose Filter, and Veber's Rules"
+- **Action Button**: "View History" (Access previously analyzed molecules)
+
+#### Input Section
+- **Molecule Input**: SMILES entry field with real-time validation
+- **Example Button**: "Load Aspirin" for quick demonstration
+- **Analyze Button**: Triggers comprehensive property calculation and rule evaluation
+
+#### Analysis Dashboard
+**1. Molecular Properties & Visualization**
+- **SMILES Display**: Full chemical structure string
+- **Classification**: "Drug-like" (green) or "Non-Drug-like" (red) badge
+- **QED Score**: Quantitative Estimate of Drug-likeness (0-1 scale) with color-coded gauge
+- **Radar Chart**: Interactive visualization comparing 6 key properties against ideal ranges:
+  - Molecular Weight (< 500 Da)
+  - LogP (< 5)
+  - H-Bond Donors (< 5)
+  - H-Bond Acceptors (< 10)
+  - Rotatable Bonds (< 10)
+  - TPSA (< 140 Å²)
+
+**2. Rule-Based Analysis Cards**
+Detailed pass/fail breakdown for three major medicinal chemistry filter sets:
+
+- **Lipinski's Rule of Five**:
+  - Focus: Oral bioavailability
+  - Criteria: MW < 500, LogP < 5, H-Donors < 5, H-Acceptors < 10
+  - Status: Shows number of violations
+
+- **Veber's Rules**:
+  - Focus: Membrane permeability and oral bioavailability
+  - Criteria: Rotatable Bonds ≤ 10, TPSA ≤ 140
+  - Status: Pass/Fail
+
+- **Ghose Filter**:
+  - Focus: "Drug-like" property ranges derived from known drugs
+  - Criteria: MW 160-480, LogP -0.4-5.6, MR 40-130, Atoms 20-70
+  - Status: Detailed breakdown of each parameter (e.g., "MW: 180.16 (Pass)")
+
+**3. ADMET Profile (Predicted)**
+Mock predictions for key Pharmacokinetic properties:
+- **Absorption**: High/Low
+- **BBB Permeability**: Yes/No
+- **CYP450 Inhibitor**: Yes/No
+- **Toxicity**: High/Low probability
+- **Half-Life**: Estimated duration
+
+#### Reporting
+- **PDF Export**: Generates a professional report containing:
+  - Executive summary
+  - Complete physicochemical property list
+  - Detailed rule violation analysis
+  - ADMET profile
+  - Disclaimer
+
+---
+
+### 6. **Explainability Page** (`Explainability.tsx`) - AI Explainability
 **URL**: `/explainability`
 
 AI model interpretability and visualization features:
@@ -333,7 +720,7 @@ Detailed explanations:
 
 ---
 
-### 4. **Performance Page** (`Performance.tsx`) - Model Performance Analysis
+### 7. **Performance Page** (`Performance.tsx`) - Model Performance Analysis
 **URL**: `/performance`
 
 Comprehensive model comparison and analytics dashboard:
@@ -431,7 +818,7 @@ Three highlighted achievements:
 
 ---
 
-### 5. **Dataset Page** (`Dataset.tsx`) - Dataset Explorer
+### 8. **Dataset Page** (`Dataset.tsx`) - Dataset Explorer
 **URL**: `/dataset`
 
 Explore and analyze training datasets with advanced filtering:
@@ -536,7 +923,7 @@ Columns (18 total):
 
 ---
 
-### 6. **Documentation Page** (`Documentation.tsx`) - Technical Documentation
+### 9. **Documentation Page** (`Documentation.tsx`) - Technical Documentation
 **URL**: `/documentation`
 
 Comprehensive technical documentation with PDF export:
@@ -625,7 +1012,7 @@ Each section includes:
 
 ---
 
-### 7. **About Page** (`About.tsx`) - About & Contact
+### 10. **About Page** (`About.tsx`) - About & Contact
 **URL**: `/about`
 
 Information about the developer, research, and contact form:
@@ -687,7 +1074,7 @@ Information about the developer, research, and contact form:
 
 ---
 
-### 8. **404 Not Found Page** (`NotFound.tsx`)
+### 11. **404 Not Found Page** (`NotFound.tsx`)
 **URL**: Any invalid route
 
 Simple error page:
@@ -739,6 +1126,18 @@ Including: Accordion, Alert Dialog, Avatar, Button, Card, Checkbox, Dialog, Drop
 ---
 
 ## 📊 Data & Models
+
+### Hybrid Validation Strategy
+The platform employs a dual-mode validation system to ensure scientific accuracy during demonstration and testing:
+
+1. **Experimental Ground Truth (Validation Mode)**:
+   - For known drug-target pairs (e.g., Gefitinib-EGFR), the system returns validated experimental binding affinity values (IC50 converted to pK).
+   - Ensures demonstrations reflect real-world pharmaceutical data.
+   - Includes proven non-binders (e.g., Aspirin-EGFR) as negative controls.
+
+2. **AI Inference (Prediction Mode)**:
+   - For novel or uncharacterized compounds, the deep learning model generates real-time predictions.
+   - Uses the GNN+Transformer pipeline to estimate affinity based on structural compatibility.
 
 ### Dataset Samples (`datasetSamples.ts`)
 Contains **10,000 generated dataset entries** with:
@@ -824,7 +1223,7 @@ Real protein sequences for major drug targets:
 
 ---
 
-## ⚙️ Configuration
+## 9. ⚙️ Configuration
 
 ### Environment Variables (`.env`)
 ```env
@@ -864,7 +1263,7 @@ VITE_SUPABASE_URL=https://sxwwzldmmaktavdbgfyw.supabase.co
 
 ---
 
-## 🚀 Setup & Installation
+## 10. � Setup & Installation
 
 ### Prerequisites
 - Node.js (v18+ recommended)
@@ -895,7 +1294,7 @@ bun install
 
 ---
 
-## ▶️ Running the Project
+## 11. 🚀 Running the Project
 
 ### Development Server
 ```bash
@@ -937,7 +1336,7 @@ npm run test:watch  # Run tests in watch mode
 
 ---
 
-## 📦 Dependencies
+## 12. 📦 Dependencies
 
 ### Production Dependencies (66 packages)
 Key dependencies include:

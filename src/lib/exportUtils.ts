@@ -8,13 +8,13 @@ export type ExportFormat = 'csv' | 'json';
  */
 function convertToCSV(data: any[]): string {
   if (data.length === 0) return '';
-  
+
   // Get headers from first object
   const headers = Object.keys(data[0]);
-  
+
   // Create CSV header row
   const csvHeaders = headers.join(',');
-  
+
   // Create CSV data rows
   const csvRows = data.map(row => {
     return headers.map(header => {
@@ -26,7 +26,7 @@ function convertToCSV(data: any[]): string {
       return value ?? '';
     }).join(',');
   });
-  
+
   return [csvHeaders, ...csvRows].join('\n');
 }
 
@@ -67,7 +67,7 @@ export function exportToJSON(data: any[], filename: string = 'export.json') {
 export function exportDatasetEntries(entries: any[], format: ExportFormat = 'csv') {
   const timestamp = new Date().toISOString().split('T')[0];
   const filename = `drugbind-dataset-${timestamp}`;
-  
+
   // Flatten the data for better CSV export
   const flattenedEntries = entries.map(entry => ({
     id: entry.id,
@@ -91,7 +91,7 @@ export function exportDatasetEntries(entries: any[], format: ExportFormat = 'csv
     // Truncate FASTA for CSV readability
     fasta_sequence: format === 'csv' ? entry.fasta.substring(0, 100) + '...' : entry.fasta,
   }));
-  
+
   if (format === 'csv') {
     exportToCSV(flattenedEntries, `${filename}.csv`);
   } else {
@@ -120,7 +120,7 @@ export interface PredictionRecord {
 export function exportPredictionHistory(predictions: PredictionRecord[], format: ExportFormat = 'csv') {
   const timestamp = new Date().toISOString().split('T')[0];
   const filename = `prediction-history-${timestamp}`;
-  
+
   const exportData = predictions.map(pred => ({
     timestamp: pred.timestamp,
     drug_name: pred.drugName || 'N/A',
@@ -130,7 +130,7 @@ export function exportPredictionHistory(predictions: PredictionRecord[], format:
     predicted_pk: pred.predictedPk,
     confidence: pred.confidence,
   }));
-  
+
   if (format === 'csv') {
     exportToCSV(exportData, `${filename}.csv`);
   } else {
@@ -145,6 +145,18 @@ export function exportFilteredDataset(entries: any[], filterCriteria: string, fo
   const timestamp = new Date().toISOString().split('T')[0];
   const criteriaSlug = filterCriteria.toLowerCase().replace(/\s+/g, '-').substring(0, 30);
   const filename = `dataset-${criteriaSlug}-${timestamp}`;
-  
+
   exportDatasetEntries(entries, format);
+}
+
+/**
+ * Generate template CSV file for batch upload
+ */
+export function downloadTemplate() {
+  const template = `drug_name,smiles,protein_name,fasta,priority
+Aspirin,CC(=O)OC1=CC=CC=C1C(=O)O,COX-2,MTKLIRNLALCPGPTLQQLHIDSLVRPEMVQIASQKITFPNWYYVGRKPKVENHTLFTLQYIRGFKELTQKLNLRQVTEHISGQPSLQVHVKRQEQLSPEQTQGPSPQTQSPQEQPQTQSPQEQPQTQSPQEQ,false
+Ibuprofen,CC(C)CC1=CC=C(C=C1)C(C)C(=O)O,COX-1,MTKLIRNLALCPGPTLQQLHIDSLVRPEMVQIASQKITFPNWYYVGRKPKVENHTLFTLQYIRGFKELTQKLNLRQVTEHISGQPSLQVHVKRQEQLSPEQTQGPSPQTQSPQEQPQTQSPQEQPQTQSPQEQ,false
+Caffeine,CN1C=NC2=C1C(=O)N(C(=O)N2C)C,Adenosine A2A,MPIMGSSVYITVELAIAVLAILGNVLVCWAVWLNSNLQNVTNYFVVSLAAADIAVGVLAIPFAITISTGFCAACHGCLFIACFVLVLTQSSIFSLLAIAIDRYIAIRIPLRYNGLVTGTRAKGIIAICWVLSFAIGLTPMLGWNNCGQPKEGKNHSQGCGEGQVACLFEDVVPMNYMVYFNFFACVLVPLLLMLGVYLRIFLAARRQLKQMESQPLPGERARSTLQKEVHAAKSLAIIVGLFALCWLPLHIINCFTFFCPDCSHAPLWLMYLAIVLSHTNSVVNPFIYAYRIREFRQTFRKIIRSHVLRQQEPFKAAGTSARVLAAHGSDGEQVSLRLNGHPPGVWANGSAPHPERRPNGYALGLVSGGSAQESQGNTGLPDVELLSHELKGVCPEPPGLDDPLAQDGAGVS,true`;
+
+  downloadFile(template, 'batch_template.csv', 'text/csv;charset=utf-8;');
 }

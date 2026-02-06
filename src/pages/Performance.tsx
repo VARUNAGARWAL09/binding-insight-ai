@@ -1,10 +1,10 @@
 import { BarChart3, TrendingDown, TrendingUp, Activity, Info, Target, Zap, Brain, FlaskConical } from "lucide-react";
 import { AppLayout } from "@/components/layout/AppLayout";
-import { 
-  RMSEComparisonChart, 
-  PearsonComparisonChart, 
+import {
+  RMSEComparisonChart,
+  PearsonComparisonChart,
   ModelComparisonRadar,
-  TrainingProgressChart 
+  TrainingProgressChart
 } from "@/components/charts/MetricsChart";
 import { PredictionScatterChart } from "@/components/charts/PredictionScatterChart";
 import { ErrorDistributionChart } from "@/components/charts/ErrorDistributionChart";
@@ -14,25 +14,25 @@ import { MetricBreakdownChart } from "@/components/charts/MetricBreakdownChart";
 import { MOCK_METRICS } from "@/lib/api";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-function MetricCard({ 
-  title, 
-  baseline, 
-  dl, 
+function MetricCard({
+  title,
+  baseline,
+  dl,
   unit = '',
   improvement,
   lowerIsBetter = false,
-  description 
-}: { 
-  title: string; 
-  baseline: number; 
-  dl: number; 
+  description
+}: {
+  title: string;
+  baseline: number;
+  dl: number;
   unit?: string;
   improvement: string;
   lowerIsBetter?: boolean;
   description: string;
 }) {
   const isImproved = lowerIsBetter ? dl < baseline : dl > baseline;
-  
+
   return (
     <div className="metric-card">
       <div className="flex items-start justify-between mb-3">
@@ -92,8 +92,8 @@ function ComparisonContext() {
             <div>
               <h4 className="font-medium text-foreground">Baseline: Random Forest</h4>
               <p className="text-sm text-muted-foreground mt-1">
-                Traditional ML approach using Morgan fingerprints (2048 bits) as molecular descriptors. 
-                Represents the industry standard for quick, interpretable predictions. 
+                Traditional ML approach using Morgan fingerprints (2048 bits) as molecular descriptors.
+                Represents the industry standard for quick, interpretable predictions.
                 <span className="text-primary font-medium"> Used as the comparison benchmark.</span>
               </p>
             </div>
@@ -107,7 +107,7 @@ function ComparisonContext() {
             <div>
               <h4 className="font-medium text-foreground">Deep Learning: GNN + Transformer</h4>
               <p className="text-sm text-muted-foreground mt-1">
-                State-of-the-art architecture combining Graph Attention Networks for molecular structure 
+                State-of-the-art architecture combining Graph Attention Networks for molecular structure
                 and Transformers for protein sequences.
                 <span className="text-primary font-medium"> Our target model for production use.</span>
               </p>
@@ -117,9 +117,13 @@ function ComparisonContext() {
       </div>
       <div className="mt-4 p-3 bg-primary/5 rounded-lg border border-primary/20">
         <p className="text-sm text-muted-foreground">
-          <span className="font-semibold text-foreground">Dataset:</span> Both models trained on 90,000 drug-protein pairs 
-          from BindingDB and PDBbind, validated on 10,000 held-out samples. All metrics computed on the same test set 
+          <span className="font-semibold text-foreground">Dataset:</span> Both models trained on 90,000 drug-protein pairs
+          from BindingDB and PDBbind, validated on 10,000 held-out samples. All metrics computed on the same test set
           to ensure fair comparison.
+          <br /><br />
+          <span className="font-semibold text-foreground">Live Inference:</span> The system currently employs a
+          <span className="text-primary font-medium"> Hybrid Validation Strategy</span>: known drug-target pairs (e.g., Gefitinib-EGFR) are
+          validated against experimental ground truth, while novel compounds use real-time AI inference.
         </p>
       </div>
     </div>
@@ -146,7 +150,7 @@ export default function Performance() {
             <h1 className="text-2xl font-bold text-foreground">Model Performance Analysis</h1>
           </div>
           <p className="text-muted-foreground max-w-3xl">
-            Comprehensive comparison of baseline (Random Forest) vs deep learning (GNN + Transformer) models 
+            Comprehensive comparison of baseline (Random Forest) vs deep learning (GNN + Transformer) models
             across multiple metrics. All evaluations performed on a held-out test set of 10,000 drug-protein pairs.
           </p>
         </div>
@@ -156,32 +160,32 @@ export default function Performance() {
 
         {/* Key Metrics Cards */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <MetricCard 
-            title="RMSE (↓ is better)" 
-            baseline={baseline.rmse} 
+          <MetricCard
+            title="RMSE (↓ is better)"
+            baseline={baseline.rmse}
             dl={dl.rmse}
             improvement={`${rmseImprovement}% reduction`}
             lowerIsBetter
             description="Root Mean Square Error measures average prediction error magnitude. Lower values indicate more accurate predictions."
           />
-          <MetricCard 
-            title="MAE (↓ is better)" 
-            baseline={baseline.mae} 
+          <MetricCard
+            title="MAE (↓ is better)"
+            baseline={baseline.mae}
             dl={dl.mae}
             improvement={`${((1 - dl.mae / baseline.mae) * 100).toFixed(1)}% reduction`}
             lowerIsBetter
             description="Mean Absolute Error shows average absolute difference between predicted and actual pK values."
           />
-          <MetricCard 
-            title="Pearson R (↑ is better)" 
-            baseline={baseline.pearson_r} 
+          <MetricCard
+            title="Pearson R (↑ is better)"
+            baseline={baseline.pearson_r}
             dl={dl.pearson_r}
             improvement={`${pearsonImprovement}% improvement`}
             description="Pearson correlation coefficient measures linear relationship strength. Values closer to 1 indicate better predictions."
           />
-          <MetricCard 
-            title="R² (↑ is better)" 
-            baseline={baseline.r_squared} 
+          <MetricCard
+            title="R² (↑ is better)"
+            baseline={baseline.r_squared}
             dl={dl.r_squared}
             improvement={`${((dl.r_squared - baseline.r_squared) / baseline.r_squared * 100).toFixed(1)}% improvement`}
             description="Coefficient of determination shows variance explained by the model. Higher values mean better fit."
@@ -206,12 +210,12 @@ export default function Performance() {
                 <PredictionScatterChart modelType="baseline" />
                 <ChartExplanation title="Understanding This Chart">
                   <p>
-                    Each point represents a drug-protein pair. The x-axis shows actual binding affinity (pK), 
+                    Each point represents a drug-protein pair. The x-axis shows actual binding affinity (pK),
                     and y-axis shows the model's prediction. Points on the diagonal green line indicate perfect predictions.
                   </p>
                   <p className="mt-2">
-                    <span className="font-semibold text-foreground">Why these values?</span> The Random Forest model 
-                    shows wider scatter (more points far from the diagonal), indicating higher prediction variance. 
+                    <span className="font-semibold text-foreground">Why these values?</span> The Random Forest model
+                    shows wider scatter (more points far from the diagonal), indicating higher prediction variance.
                     This is typical for fingerprint-based methods that lose 3D structural information.
                   </p>
                 </ChartExplanation>
@@ -223,12 +227,12 @@ export default function Performance() {
                 <PredictionScatterChart modelType="dl" />
                 <ChartExplanation title="Understanding This Chart">
                   <p>
-                    The GNN + Transformer shows tighter clustering around the diagonal, indicating more consistent 
+                    The GNN + Transformer shows tighter clustering around the diagonal, indicating more consistent
                     and accurate predictions across all affinity ranges.
                   </p>
                   <p className="mt-2">
-                    <span className="font-semibold text-foreground">Why the improvement?</span> Graph neural networks 
-                    preserve molecular topology and 3D relationships, while Transformers capture long-range protein 
+                    <span className="font-semibold text-foreground">Why the improvement?</span> Graph neural networks
+                    preserve molecular topology and 3D relationships, while Transformers capture long-range protein
                     sequence dependencies—both crucial for accurate binding prediction.
                   </p>
                 </ChartExplanation>
@@ -242,12 +246,12 @@ export default function Performance() {
                 <PearsonComparisonChart metrics={metrics} />
                 <ChartExplanation title="What These Metrics Mean">
                   <p>
-                    <span className="font-semibold">Pearson R:</span> Measures linear correlation between predictions 
-                    and actual values. Our DL model achieves 0.76, exceeding the 0.70 threshold considered acceptable 
+                    <span className="font-semibold">Pearson R:</span> Measures linear correlation between predictions
+                    and actual values. Our DL model achieves 0.76, exceeding the 0.70 threshold considered acceptable
                     for drug discovery applications.
                   </p>
                   <p className="mt-2">
-                    <span className="font-semibold">R² (R-squared):</span> Shows the proportion of variance explained. 
+                    <span className="font-semibold">R² (R-squared):</span> Shows the proportion of variance explained.
                     The DL model explains 58% of variance vs 34% for baseline—a 71% relative improvement.
                   </p>
                 </ChartExplanation>
@@ -258,11 +262,11 @@ export default function Performance() {
                 <ModelComparisonRadar metrics={metrics} />
                 <ChartExplanation title="Interpreting the Radar Chart">
                   <p>
-                    Each axis represents a normalized metric (0-100 scale). Larger area indicates better overall performance. 
+                    Each axis represents a normalized metric (0-100 scale). Larger area indicates better overall performance.
                     The deep learning model (blue) consistently outperforms baseline (gray) across all dimensions.
                   </p>
                   <p className="mt-2">
-                    <span className="font-semibold">Note:</span> "Low RMSE" and "Low MAE" are inverted scores 
+                    <span className="font-semibold">Note:</span> "Low RMSE" and "Low MAE" are inverted scores
                     (higher is better) to maintain consistent interpretation.
                   </p>
                 </ChartExplanation>
@@ -278,12 +282,12 @@ export default function Performance() {
                 <ErrorDistributionChart />
                 <ChartExplanation title="Understanding Error Distribution">
                   <p>
-                    This histogram shows how prediction errors are distributed. The x-axis shows error magnitude 
+                    This histogram shows how prediction errors are distributed. The x-axis shows error magnitude
                     (in pK units), and y-axis shows frequency. Ideally, most errors should be in the leftmost bins.
                   </p>
                   <p className="mt-2">
-                    <span className="font-semibold text-foreground">Key insight:</span> The GNN + Transformer 
-                    has significantly more predictions with errors below 1.0 pK units, which is the threshold 
+                    <span className="font-semibold text-foreground">Key insight:</span> The GNN + Transformer
+                    has significantly more predictions with errors below 1.0 pK units, which is the threshold
                     for "useful" predictions in lead optimization.
                   </p>
                 </ChartExplanation>
@@ -294,12 +298,12 @@ export default function Performance() {
                 <ConfidenceCalibrationChart />
                 <ChartExplanation title="What is Calibration?">
                   <p>
-                    A well-calibrated model's confidence scores should match actual accuracy. If a model says 
+                    A well-calibrated model's confidence scores should match actual accuracy. If a model says
                     it's 80% confident, it should be correct 80% of the time.
                   </p>
                   <p className="mt-2">
-                    <span className="font-semibold text-foreground">Why this matters:</span> The DL model (blue) 
-                    closely follows the ideal diagonal, meaning its confidence estimates are trustworthy for 
+                    <span className="font-semibold text-foreground">Why this matters:</span> The DL model (blue)
+                    closely follows the ideal diagonal, meaning its confidence estimates are trustworthy for
                     decision-making. The baseline (gray) is under-confident—it's often more accurate than it claims.
                   </p>
                 </ChartExplanation>
@@ -311,16 +315,16 @@ export default function Performance() {
               <RMSEComparisonChart metrics={metrics} />
               <ChartExplanation title="RMSE vs MAE Explained">
                 <p>
-                  <span className="font-semibold">RMSE (Root Mean Square Error):</span> Penalizes large errors more heavily. 
+                  <span className="font-semibold">RMSE (Root Mean Square Error):</span> Penalizes large errors more heavily.
                   An RMSE of 1.07 pK means the model's predictions typically deviate by about 1 pK unit.
                 </p>
                 <p className="mt-2">
-                  <span className="font-semibold">MAE (Mean Absolute Error):</span> Treats all errors equally. 
+                  <span className="font-semibold">MAE (Mean Absolute Error):</span> Treats all errors equally.
                   The lower MAE (0.82) compared to RMSE (1.07) suggests most errors are small, with fewer outliers.
                 </p>
                 <p className="mt-2">
-                  <span className="font-semibold text-foreground">Clinical significance:</span> A 1 pK unit change 
-                  represents a 10-fold change in binding affinity. Our DL model's error margin is within acceptable 
+                  <span className="font-semibold text-foreground">Clinical significance:</span> A 1 pK unit change
+                  represents a 10-fold change in binding affinity. Our DL model's error margin is within acceptable
                   limits for early-stage drug screening.
                 </p>
               </ChartExplanation>
@@ -335,11 +339,11 @@ export default function Performance() {
                 <TrainingProgressChart />
                 <ChartExplanation title="Interpreting Training Curves">
                   <p>
-                    The training curve shows how well the model learns from training data, while the validation 
+                    The training curve shows how well the model learns from training data, while the validation
                     curve shows generalization to unseen data.
                   </p>
                   <p className="mt-2">
-                    <span className="font-semibold text-foreground">What we observe:</span> Both curves converge 
+                    <span className="font-semibold text-foreground">What we observe:</span> Both curves converge
                     smoothly with minimal gap between them, indicating:
                   </p>
                   <ul className="list-disc list-inside mt-1 space-y-1">
@@ -355,7 +359,7 @@ export default function Performance() {
                 <LearningCurveChart />
                 <ChartExplanation title="Understanding Learning Curves">
                   <p>
-                    This shows how model performance changes with training data size. Both models improve 
+                    This shows how model performance changes with training data size. Both models improve
                     with more data, but at different rates.
                   </p>
                   <p className="mt-2">
@@ -380,7 +384,7 @@ export default function Performance() {
                 <MetricBreakdownChart type="affinity" />
                 <ChartExplanation title="Why Performance Varies">
                   <p>
-                    Binding affinity prediction difficulty varies by range. Very weak (low pK) and very strong 
+                    Binding affinity prediction difficulty varies by range. Very weak (low pK) and very strong
                     (high pK) binders are harder to predict due to:
                   </p>
                   <ul className="list-disc list-inside mt-1 space-y-1">
@@ -389,7 +393,7 @@ export default function Performance() {
                     <li><span className="font-semibold">High pK:</span> Rare, complex multi-point interactions</li>
                   </ul>
                   <p className="mt-2">
-                    The DL model shows consistent improvement across all ranges, with largest gains in the 
+                    The DL model shows consistent improvement across all ranges, with largest gains in the
                     medium range where most drug candidates fall.
                   </p>
                 </ChartExplanation>
@@ -409,7 +413,7 @@ export default function Performance() {
                     <li><span className="font-semibold">Nuclear Receptors:</span> Large, flexible binding pockets</li>
                   </ul>
                   <p className="mt-2">
-                    The DL model's Transformer component excels at capturing protein-specific binding patterns, 
+                    The DL model's Transformer component excels at capturing protein-specific binding patterns,
                     showing largest improvements for proteases and kinases.
                   </p>
                 </ChartExplanation>
@@ -506,21 +510,21 @@ export default function Performance() {
             <div className="flex items-start gap-2">
               <TrendingUp className="h-4 w-4 text-success mt-0.5 shrink-0" />
               <span>
-                <span className="font-medium text-foreground">25% lower RMSE:</span> More accurate binding predictions 
+                <span className="font-medium text-foreground">25% lower RMSE:</span> More accurate binding predictions
                 for drug screening applications.
               </span>
             </div>
             <div className="flex items-start gap-2">
               <TrendingUp className="h-4 w-4 text-success mt-0.5 shrink-0" />
               <span>
-                <span className="font-medium text-foreground">31% higher correlation:</span> Pearson R of 0.76 exceeds 
+                <span className="font-medium text-foreground">31% higher correlation:</span> Pearson R of 0.76 exceeds
                 the 0.70 threshold for production use.
               </span>
             </div>
             <div className="flex items-start gap-2">
               <TrendingUp className="h-4 w-4 text-success mt-0.5 shrink-0" />
               <span>
-                <span className="font-medium text-foreground">Better calibration:</span> Confidence scores you can 
+                <span className="font-medium text-foreground">Better calibration:</span> Confidence scores you can
                 trust for decision-making.
               </span>
             </div>

@@ -9,11 +9,12 @@ import { ProteinInput } from "@/components/prediction/ProteinInput";
 import { PredictionResult } from "@/components/prediction/PredictionResult";
 import { PredictionHistory } from "@/components/prediction/PredictionHistory";
 import { MoleculeGenerator } from "@/components/prediction/MoleculeGenerator";
-import { 
-  predictBinding, 
+import {
+  predictBinding,
   PredictionResponse,
   EXTERNAL_RESOURCES
 } from "@/lib/api";
+import { addPrediction } from "@/lib/historyStorage";
 import { toast } from "sonner";
 
 export default function Prediction() {
@@ -38,6 +39,24 @@ export default function Prediction() {
     try {
       const response = await predictBinding({ smiles, fasta });
       setResult(response);
+
+      // Save to history with better naming
+      const drugName = smiles.length > 20 ? `${smiles.substring(0, 20)}...` : smiles;
+      const proteinName = fasta.length > 30 ? `${fasta.substring(0, 30)}...` : fasta;
+
+      await addPrediction({
+        source: 'single',
+        drugName: drugName,
+        smiles,
+        proteinName: proteinName,
+        fasta,
+        predictedPk: response.binding_affinity_pk,
+        confidenceScore: response.confidence_score * 100, // Convert to percentage
+        isFavorite: false,
+        notes: '',
+        tags: []
+      });
+
       toast.success("Prediction completed successfully!");
     } catch (err) {
       const message = err instanceof Error ? err.message : "Prediction failed. Please try again.";
@@ -64,7 +83,7 @@ export default function Prediction() {
     setResult({
       prediction_id: prediction.id,
       binding_affinity_pk: prediction.predicted_pk,
-      confidence_score: prediction.confidence_score,
+      confidence_score: prediction.confidence_score / 100, // Normalize to 0-1 range to match API format
       atom_importances: prediction.atom_importance,
       residue_importances: prediction.residue_importance,
     });
@@ -89,8 +108,8 @@ export default function Prediction() {
                 Enter drug SMILES and protein FASTA sequences to predict binding affinity using AI.
               </p>
             </div>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={() => setShowHistory(!showHistory)}
               className="flex items-center gap-2"
             >
@@ -109,7 +128,7 @@ export default function Prediction() {
 
         {/* AI Molecule Generator */}
         <div className="mb-6">
-          <MoleculeGenerator 
+          <MoleculeGenerator
             onDrugGenerated={setSmiles}
             onProteinGenerated={setFasta}
           />
@@ -161,17 +180,17 @@ export default function Prediction() {
 
         {/* Input Section */}
         <div className="card-scientific p-6 mb-6 space-y-6">
-          <MoleculeInput 
-            value={smiles} 
-            onChange={setSmiles} 
+          <MoleculeInput
+            value={smiles}
+            onChange={setSmiles}
             disabled={isLoading}
           />
-          
+
           <div className="border-t border-border" />
-          
-          <ProteinInput 
-            value={fasta} 
-            onChange={setFasta} 
+
+          <ProteinInput
+            value={fasta}
+            onChange={setFasta}
             disabled={isLoading}
           />
 
@@ -184,7 +203,7 @@ export default function Prediction() {
           )}
 
           {/* Predict Button */}
-          <Button 
+          <Button
             onClick={handlePredict}
             disabled={isLoading || !smiles.trim() || !fasta.trim()}
             variant="scientific"
@@ -207,7 +226,7 @@ export default function Prediction() {
 
         {/* Results Section */}
         {result && (
-          <PredictionResult 
+          <PredictionResult
             result={result}
             smiles={smiles}
             fasta={fasta}

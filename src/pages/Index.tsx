@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
-import { 
-  FlaskConical, 
-  Brain, 
-  BarChart3, 
-  Database, 
+import {
+  FlaskConical,
+  Brain,
+  BarChart3,
+  Database,
   ArrowRight,
   Dna,
   Target,
@@ -34,6 +34,18 @@ const features = [
     title: "Model Performance",
     description: "Compare baseline (Random Forest) vs deep learning (GNN + Transformer) with comprehensive metrics.",
     link: "/performance",
+  },
+  {
+    icon: FlaskConical,
+    title: "Drug Likeness Analysis",
+    description: "Evaluate drug candidates against Lipinski's Rule of 5, Ghose Filter, and Veber's Rules.",
+    link: "/drug-likeness",
+  },
+  {
+    icon: Layers,
+    title: "Prediction History",
+    description: "Track your past predictions, view trends, and export results for further analysis.",
+    link: "/history",
   },
   {
     icon: Database,
@@ -70,24 +82,24 @@ export default function Index() {
             <div className="absolute top-20 left-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl animate-pulse" />
             <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
           </div>
-          
+
           <div className="relative container mx-auto px-4 sm:px-6 py-12 sm:py-20 lg:py-28">
             <div className="max-w-4xl mx-auto text-center">
               <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-primary/10 text-primary text-xs sm:text-sm font-medium mb-4 sm:mb-6 animate-fade-in border border-primary/20">
                 <Sparkles className="h-3 w-3 sm:h-4 sm:w-4" />
                 <span>AI-Powered Drug Discovery</span>
               </div>
-              
+
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4 sm:mb-6 animate-fade-in">
                 Smart Drug-Protein
                 <span className="text-gradient-primary block mt-1 sm:mt-2">Binding Prediction</span>
               </h1>
-              
+
               <p className="text-base sm:text-lg md:text-xl text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto animate-fade-in px-2">
-                Accelerate drug discovery with deep learning. Predict binding affinities, 
+                Accelerate drug discovery with deep learning. Predict binding affinities,
                 visualize molecular interactions, and understand AI decisions with explainable models.
               </p>
-              
+
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center animate-fade-in px-4 sm:px-0">
                 <Button asChild size="lg" variant="scientific" className="w-full sm:w-auto">
                   <Link to="/prediction">
@@ -137,7 +149,7 @@ export default function Index() {
                 Comprehensive Drug Discovery Platform
               </h2>
               <p className="text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto px-2">
-                From prediction to explainability, our platform provides everything you need 
+                From prediction to explainability, our platform provides everything you need
                 for AI-assisted drug-protein interaction analysis.
               </p>
             </div>
@@ -178,7 +190,7 @@ export default function Index() {
                   AI Pipeline Architecture
                 </h2>
                 <p className="text-sm sm:text-base text-muted-foreground px-2">
-                  Our model combines Graph Neural Networks for molecular representation 
+                  Our model combines Graph Neural Networks for molecular representation
                   with Transformers for protein sequence encoding.
                 </p>
               </div>
@@ -196,7 +208,7 @@ export default function Index() {
                           {step.label}
                         </span>
                       </div>
-                      
+
                       {/* Arrow between steps */}
                       {idx < pipelineSteps.length - 1 && (
                         <div className="flex flex-col items-center my-2 sm:my-3">
@@ -234,7 +246,7 @@ export default function Index() {
                 Ready to Start Predicting?
               </h2>
               <p className="text-sm sm:text-base text-muted-foreground mb-6 sm:mb-8 px-2">
-                Upload your drug SMILES and protein FASTA sequences to get instant 
+                Upload your drug SMILES and protein FASTA sequences to get instant
                 binding affinity predictions with confidence scores.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4 sm:px-0">

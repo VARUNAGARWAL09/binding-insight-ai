@@ -1,15 +1,8 @@
-import { useState } from "react";
-<<<<<<< HEAD
+﻿import { useState } from "react";
 import {
   Database,
   Download,
   ExternalLink,
-=======
-import { 
-  Database, 
-  Download, 
-  ExternalLink, 
->>>>>>> 9cb20a1c50a704bff26d22157d55c875389fbebe
   Search,
   Filter,
   AlertTriangle,
@@ -19,7 +12,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-<<<<<<< HEAD
 import {
   Table,
   TableBody,
@@ -104,72 +96,6 @@ export default function Dataset() {
       : SAMPLE_DATASET;
     exportDatasetEntries(dataToExport, 'json');
     toast.success(`Dataset with ${dataToExport.length} samples exported as JSON!`);
-=======
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
-} from "@/components/ui/table";
-import { AppLayout } from "@/components/layout/AppLayout";
-import { toast } from "sonner";
-import { SAMPLE_DATASET, DATASET_STATS, DATASET_LINKS } from "@/data/datasetSamples";
-
-export default function Dataset() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [showInvalid, setShowInvalid] = useState(false);
-
-  const filteredData = SAMPLE_DATASET.filter(item => {
-    const matchesSearch = 
-      item.smiles.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.target.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesValid = showInvalid || item.valid;
-    return matchesSearch && matchesValid;
-  });
-
-  const handleExportCSV = () => {
-    const headers = [
-      'ID', 'Drug Name', 'SMILES', 'Target Protein', 'UniProt ID', 'FASTA Sequence',
-      'pK', 'Source', 'Valid',
-      'Atom Importance', 'Residue Importance', 'Binding Site Score',
-      'Hydrophobic Score', 'Electrostatic Score', 'H-Bond Score',
-      'Van der Waals Score', 'Solvation Score', 'Entropy Score', 'Overall Confidence'
-    ];
-    const rows = SAMPLE_DATASET.map(item => [
-      item.id,
-      `"${item.drugName || 'Unknown'}"`,
-      `"${item.smiles}"`,
-      `"${item.target}"`,
-      `"${item.uniprotId || 'N/A'}"`,
-      `"${item.fasta}"`,
-      item.pk !== null ? item.pk.toFixed(2) : 'N/A',
-      item.source,
-      item.valid ? 'Valid' : 'Invalid',
-      item.atomImportance.toFixed(3),
-      item.residueImportance.toFixed(3),
-      item.bindingSiteScore.toFixed(3),
-      item.hydrophobicScore.toFixed(3),
-      item.electrostaticScore.toFixed(3),
-      item.hydrogenBondScore.toFixed(3),
-      item.vanDerWaalsScore.toFixed(3),
-      item.solvationScore.toFixed(3),
-      item.entropyScore.toFixed(3),
-      item.overallConfidence.toFixed(3),
-    ]);
-    
-    const csvContent = [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'drugbind_ai_dataset_10000_samples.csv';
-    a.click();
-    URL.revokeObjectURL(url);
-    
-    toast.success('Dataset with 10,000 samples exported as CSV!');
->>>>>>> 9cb20a1c50a704bff26d22157d55c875389fbebe
   };
 
   const handleOpenLink = (url: string, name: string, altUrl?: string) => {
@@ -229,11 +155,7 @@ export default function Dataset() {
               <Badge variant="outline" className="bg-primary/10">Primary Training</Badge>
             </div>
             <p className="text-sm text-muted-foreground mb-4">
-<<<<<<< HEAD
               Publicly accessible database of measured binding affinities, focusing on
-=======
-              Publicly accessible database of measured binding affinities, focusing on 
->>>>>>> 9cb20a1c50a704bff26d22157d55c875389fbebe
               drug-like small molecules and drug-target proteins.
             </p>
             <div className="space-y-2 text-sm">
@@ -250,15 +172,9 @@ export default function Dataset() {
                 <span className="font-mono text-primary font-semibold">{DATASET_STATS.bindingdb.afterPreprocessing.toLocaleString()}</span>
               </div>
             </div>
-<<<<<<< HEAD
             <Button
               variant="outline"
               className="w-full mt-4 group"
-=======
-            <Button 
-              variant="outline" 
-              className="w-full mt-4 group" 
->>>>>>> 9cb20a1c50a704bff26d22157d55c875389fbebe
               onClick={() => handleOpenLink(DATASET_LINKS.bindingdb.url, 'BindingDB')}
             >
               <ExternalLink className="h-4 w-4 mr-2 group-hover:text-primary transition-colors" />
@@ -272,11 +188,7 @@ export default function Dataset() {
               <Badge variant="secondary">Validation</Badge>
             </div>
             <p className="text-sm text-muted-foreground mb-4">
-<<<<<<< HEAD
               Comprehensive collection of experimentally measured binding affinity data
-=======
-              Comprehensive collection of experimentally measured binding affinity data 
->>>>>>> 9cb20a1c50a704bff26d22157d55c875389fbebe
               for biomolecular complexes with 3D structural information.
             </p>
             <div className="space-y-2 text-sm">
@@ -293,13 +205,8 @@ export default function Dataset() {
                 <span className="font-mono text-primary font-semibold">{DATASET_STATS.pdbbind.afterPreprocessing.toLocaleString()}</span>
               </div>
             </div>
-<<<<<<< HEAD
             <Button
               variant="outline"
-=======
-            <Button 
-              variant="outline" 
->>>>>>> 9cb20a1c50a704bff26d22157d55c875389fbebe
               className="w-full mt-4 group"
               onClick={() => handleOpenLink('https://www.rcsb.org/', 'RCSB PDB')}
             >
@@ -326,7 +233,7 @@ export default function Dataset() {
             </div>
             <div className="p-4 rounded-xl bg-primary/10 text-center border border-primary/20">
               <div className="text-2xl font-bold text-primary mb-1">pK Scale</div>
-              <div className="text-xs text-muted-foreground">Kd, Ki, IC50 → pK Conversion</div>
+              <div className="text-xs text-muted-foreground">Kd, Ki, IC50 ΓåÆ pK Conversion</div>
             </div>
             <div className="p-4 rounded-xl bg-success/10 text-center border border-success/20">
               <div className="text-2xl font-bold text-success mb-1">Deduplicated</div>
@@ -339,7 +246,6 @@ export default function Dataset() {
         <div className="card-scientific p-6">
           <div className="flex items-center justify-between mb-4 flex-wrap gap-4">
             <h3 className="font-semibold text-foreground">Sample Data Explorer ({SAMPLE_DATASET.length} entries)</h3>
-<<<<<<< HEAD
             <div className="flex gap-2">
               <Button variant="outline" size="sm" onClick={handleExportCSV}>
                 <Download className="h-4 w-4 mr-2" />
@@ -399,33 +305,6 @@ export default function Dataset() {
                 ({SAMPLE_DATASET.length - filteredData.length} filtered out)
               </span>
             )}
-=======
-            <Button variant="outline" size="sm" onClick={handleExportCSV}>
-              <Download className="h-4 w-4 mr-2" />
-              Export Full CSV
-            </Button>
-          </div>
-
-          {/* Search and Filter */}
-          <div className="flex gap-4 mb-4 flex-wrap">
-            <div className="relative flex-1 min-w-[200px]">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input 
-                placeholder="Search by SMILES or target protein..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-9"
-              />
-            </div>
-            <Button 
-              variant={showInvalid ? "secondary" : "outline"} 
-              size="sm"
-              onClick={() => setShowInvalid(!showInvalid)}
-            >
-              <Filter className="h-4 w-4 mr-2" />
-              {showInvalid ? 'Hide' : 'Show'} Invalid Entries
-            </Button>
->>>>>>> 9cb20a1c50a704bff26d22157d55c875389fbebe
           </div>
 
           {/* Data Table */}
@@ -457,7 +336,7 @@ export default function Dataset() {
                 {filteredData.slice(0, 100).map((item) => (
                   <TableRow key={item.id} className="hover:bg-muted/50 transition-colors">
                     <TableCell className="font-mono text-xs">{item.id}</TableCell>
-                    <TableCell className="text-xs font-medium">{item.drugName || '—'}</TableCell>
+                    <TableCell className="text-xs font-medium">{item.drugName || 'ΓÇö'}</TableCell>
                     <TableCell className="font-mono text-xs max-w-[180px] truncate" title={item.smiles}>
                       {item.smiles.slice(0, 30)}...
                     </TableCell>
@@ -466,7 +345,7 @@ export default function Dataset() {
                       {item.fasta.slice(0, 25)}...
                     </TableCell>
                     <TableCell className="text-right font-mono font-semibold text-xs">
-                      {item.pk !== null ? item.pk.toFixed(1) : '—'}
+                      {item.pk !== null ? item.pk.toFixed(1) : 'ΓÇö'}
                     </TableCell>
                     <TableCell>
                       <Badge variant={item.source === 'BindingDB' ? 'default' : 'secondary'} className="text-xs">
@@ -500,11 +379,7 @@ export default function Dataset() {
           </div>
 
           <p className="text-xs text-muted-foreground mt-4">
-<<<<<<< HEAD
             Showing {Math.min(filteredData.length, 100)} of {filteredData.length} filtered entries (total: {SAMPLE_DATASET.length.toLocaleString()} samples).
-=======
-            Showing {Math.min(filteredData.length, 100)} of {filteredData.length} filtered entries (total: {SAMPLE_DATASET.length.toLocaleString()} samples). 
->>>>>>> 9cb20a1c50a704bff26d22157d55c875389fbebe
             Export CSV to get all 10,000 samples with complete FASTA sequences and all importance columns.
           </p>
         </div>

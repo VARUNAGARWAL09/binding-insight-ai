@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { 
-  BookOpen, 
-  Download, 
-  FlaskConical, 
-  Brain, 
-  BarChart3, 
+import {
+  BookOpen,
+  Download,
+  FlaskConical,
+  Brain,
+  BarChart3,
   Database,
   Layers,
   ChevronRight,
@@ -37,311 +37,195 @@ const documentationSections: DocSection[] = [
     title: "System Overview",
     icon: BookOpen,
     content: [
-      "DrugBind AI is an advanced artificial intelligence platform designed for predicting drug-protein binding affinities. The system leverages state-of-the-art deep learning techniques, combining Graph Neural Networks (GNN) for molecular representation with Transformer architectures for protein sequence encoding.",
-      "The platform is designed to accelerate drug discovery workflows by providing rapid, accurate predictions of binding interactions between small molecule compounds and protein targets. This tool was developed as part of research conducted at RV College of Engineering, Bengaluru.",
+      "DrugBind AI is an advanced artificial intelligence platform designed for predicting how strongly a drug molecule will bind to a specific protein target. This interaction is key to discovering new medicines.",
+      "The system uses state-of-the-art deep learning, specifically combining Graph Neural Networks (which understand molecule shapes) with Transformer architectures (which understand protein sequences), to provide highly accurate predictions.",
+      "This tool helps accelerate drug discovery by allowing researchers to screen millions of potential drug candidates virtually before testing them in a lab."
     ],
     subsections: [
-      { title: "Target Users", content: ["Pharmaceutical researchers", "Computational biologists", "Medicinal chemists", "Academic researchers in structural biology", "Drug discovery scientists"] },
-      { title: "Key Features", content: ["Binding affinity prediction (pK units)", "Confidence scoring with uncertainty estimation", "SHAP explainability for drug atoms", "Attention weights for protein residues", "3D molecular visualization with bond strength coloring", "AI-powered SMILES/FASTA generation from drug/protein names", "Prediction history storage and retrieval"] },
+      { title: "Target Users", content: ["Pharmaceutical researchers", "Computational biologists", "Medicinal chemists", "Academic researchers", "Drug discovery scientists"] },
+      { title: "Key Features", content: ["Accurate binding affinity prediction", "Confidence scores for every prediction", "Visual explanations of which atoms contribute to binding", "3D molecular visualization", "Automatic history tracking", "Detailed PDF reports"] },
     ],
   },
   {
     id: "pk-score",
-    title: "Understanding pK Score (Binding Affinity)",
+    title: "Understanding Binding Affinity (pK Score)",
     icon: Target,
     content: [
-      "The pK value (also written as pKd, pKi, or pIC50) is the negative logarithm of the dissociation constant and represents the binding affinity between a drug molecule and its protein target. Higher pK values indicate stronger binding.",
-      "The pK scale is logarithmic, meaning each unit increase represents a 10-fold increase in binding affinity. A drug with pK = 9 binds 10 times more strongly than one with pK = 8.",
+      "The primary output of the model is a 'pK value'. This is a standard measure of how tightly a drug binds to its target. Technically, it is the negative logarithm of the dissociation constant.",
+      "Think of it like a Richter scale for drugs: a higher number means a stronger binding. Each step up (e.g., from 8 to 9) means the binding is 10 times stronger.",
     ],
     subsections: [
-      { 
-        title: "pK Score Ranges and Interpretation", 
+      {
+        title: "How to Interpret the Score",
         content: [
-          "pK ≥ 10: Exceptional Affinity - Extremely tight binding, rare in drug candidates. Often seen in covalent inhibitors or highly optimized leads.",
-          "pK 9-10: Very High Affinity - Excellent drug candidate. Strong, specific binding suitable for therapeutic development.",
-          "pK 7-9: High Affinity - Good lead compound. Most successful drugs fall in this range. Suitable for further optimization.",
-          "pK 5-7: Moderate Affinity - Weak lead. May require significant structural modifications to improve binding.",
-          "pK 3-5: Low Affinity - Very weak binding. Typically not suitable for drug development without major redesign.",
-          "pK < 3: Negligible Affinity - Essentially no meaningful binding. Not a viable drug candidate."
-        ] 
-      },
-      { 
-        title: "Clinical Relevance", 
-        content: [
-          "Most FDA-approved drugs have pK values between 6 and 10",
-          "Kinase inhibitors typically show pK 7-9 for selectivity",
-          "GPCR-targeting drugs often require pK > 8 for efficacy",
-          "Antibiotics may function with lower pK (5-7) due to concentration effects"
-        ] 
+          "pK >= 10 (Exceptional): Extremely tight binding. Rare and usually indicates a highly optimized drug candidate.",
+          "pK 9-10 (Very High): Excellent potential. These are strong candidates for further development.",
+          "pK 7-9 (High): Good potential. Most successful drugs fall into this range.",
+          "pK 5-7 (Moderate): Weak binding. Might be a starting point but needs significant improvement.",
+          "pK < 5 (Low): Very weak or no binding. Likely not a viable drug candidate."
+        ]
       },
       {
-        title: "Affinity Unit Conversions",
+        title: "Scientific Context",
         content: [
-          "pK = -log₁₀(Kd) where Kd is in molar (M)",
-          "pK 9 = Kd of 1 nanomolar (nM)",
-          "pK 6 = Kd of 1 micromolar (μM)",
-          "pK 3 = Kd of 1 millimolar (mM)",
-          "IC50 and Ki values are similarly converted using pIC50 = -log₁₀(IC50)"
+          "Most FDA-approved drugs have pK values between 6 and 10.",
+          "A value of 9 corresponds to a concentration of 1 nanomolar (very potent).",
+          "A value of 6 corresponds to 1 micromolar (moderately potent)."
         ]
       }
     ],
   },
   {
     id: "comparison-metrics",
-    title: "Model Comparison Metrics",
+    title: "Model Performance Metrics",
     icon: Activity,
     content: [
-      "Understanding model performance metrics is crucial for evaluating the reliability of binding affinity predictions. We use several statistical measures to compare our deep learning model against baseline approaches.",
+      "To ensure our predictions are reliable, we rigorously test the model against known experimental data. We use several standard statistical metrics to measure accuracy.",
     ],
     subsections: [
-      { 
-        title: "Root Mean Square Error (RMSE)", 
+      {
+        title: "Root Mean Square Error (RMSE)",
         content: [
-          "RMSE measures the average magnitude of prediction errors in pK units",
-          "Lower RMSE indicates better prediction accuracy",
-          "Our model achieves RMSE 1.07 vs baseline 1.42 (25% improvement)",
-          "RMSE < 1.0 is considered excellent for binding affinity prediction",
-          "RMSE 1.0-1.5 is good, >1.5 indicates room for improvement"
-        ] 
+          "This measures the average 'distance' between our predicted value and the actual laboratory value.",
+          "Lower is better. A value of 0 would mean perfect accuracy.",
+          "Our model achieves an RMSE of 1.07, which is considered excellent for this type of prediction."
+        ]
       },
-      { 
-        title: "Mean Absolute Error (MAE)", 
+      {
+        title: "Mean Absolute Error (MAE)",
         content: [
-          "MAE represents the average absolute difference between predicted and actual values",
-          "Less sensitive to outliers than RMSE",
-          "Our model achieves MAE 0.82 vs baseline 1.08",
-          "MAE < 0.8 is excellent, 0.8-1.2 is good"
-        ] 
+          "Similar to RMSE, this is the average absolute difference between prediction and reality.",
+          "Our model achieves an MAE of 0.82, meaning predictions are typically within 0.82 units of the true value."
+        ]
       },
-      { 
-        title: "Pearson Correlation (R)", 
+      {
+        title: "Pearson Correlation (R)",
         content: [
-          "Measures linear correlation between predicted and experimental affinities",
-          "Range: -1 to +1, where +1 is perfect positive correlation",
-          "Our model achieves R = 0.76 vs baseline R = 0.58",
-          "R > 0.7 is considered strong correlation for drug discovery",
-          "R > 0.8 is excellent, suitable for lead optimization"
-        ] 
+          "This measures how well the model captures trends. If the actual affinity goes up, does the prediction also go up?",
+          "Range is -1 to +1.  +1 is a perfect match.",
+          "Our model achieves 0.76, indicating a strong positive correlation."
+        ]
       },
-      { 
-        title: "R-squared (R²)", 
+      {
+        title: "R-squared (R²)",
         content: [
-          "Coefficient of determination - proportion of variance explained by the model",
-          "Range: 0 to 1, where 1 means perfect prediction",
-          "Our model achieves R² = 0.58 vs baseline R² = 0.34",
-          "R² > 0.5 indicates the model explains majority of variance",
-          "Useful for comparing models on the same dataset"
-        ] 
-      },
-      { 
-        title: "Concordance Index (CI)", 
-        content: [
-          "Measures the probability of correctly ranking pairs of compounds",
-          "Important for virtual screening where ranking matters more than exact values",
-          "CI > 0.8 is considered excellent for ranking compounds",
-          "CI 0.7-0.8 is good, <0.7 indicates ranking issues"
-        ] 
+          "This tells us what percentage of the data's variation our model can explain.",
+          "A value of 100% (or 1.0) would mean it explains everything.",
+          "Our model achieves 0.58, which is significantly better than the baseline of 0.34."
+        ]
       }
     ],
   },
   {
     id: "architecture",
-    title: "System Architecture",
+    title: "How the AI Works",
     icon: Layers,
     content: [
-      "The machine learning pipeline processes inputs through: data preprocessing, molecular encoding using Graph Neural Networks, protein sequence encoding using Transformer models, feature fusion, and binding affinity regression.",
-      "The multimodal architecture was designed to capture both molecular topology (through graph convolutions) and sequential patterns in proteins (through self-attention mechanisms).",
+      "Our 'Brain' consists of two main parts that work together: one part looks at the drug, and the other looks at the protein.",
     ],
     subsections: [
-      { 
-        title: "Drug Encoding (Graph Neural Network)", 
+      {
+        title: "1. The Drug Reader (Graph Neural Network - GNN)",
         content: [
-          "SMILES → Molecular Graph conversion using RDKit",
-          "3-layer Graph Convolutional Network (GCN)",
-          "Node features: atom type, degree, charge, hybridization",
-          "Edge features: bond type, conjugation, ring membership",
-          "Output: 128-dimensional molecular embedding"
-        ] 
+          "We treat drug molecules like graphs (nodes are atoms, edges are bonds).",
+          "This allows the AI to understand the 3D shape and chemical properties of the drug.",
+          "It captures features like charge, atom type, and connectivity."
+        ]
       },
-      { 
-        title: "Protein Encoding (Transformer)", 
+      {
+        title: "2. The Protein Reader (Transformer)",
         content: [
-          "FASTA sequence tokenization (amino acid vocabulary)",
-          "6-layer Transformer encoder with 8 attention heads",
-          "Positional encoding for sequence order",
-          "Output: 256-dimensional protein embedding",
-          "Attention weights extracted for explainability"
-        ] 
+          "We treat proteins like language sequences (strings of amino acids).",
+          "Using technology similar to ChatGPT (Transformers), the model learns the 'grammar' of protein folding and interaction sites.",
+          "It pays attention to specific parts of the sequence that are likely to interact with the drug."
+        ]
       },
-      { 
-        title: "Feature Fusion & Prediction", 
+      {
+        title: "3. The Decision Maker (Fusion Layer)",
         content: [
-          "Concatenation of drug and protein embeddings (384-dim)",
-          "Fully connected layers: 512 → 256 → 128 → 1",
-          "ReLU activation with dropout (0.3) for regularization",
-          "Final output: binding affinity (pK) + confidence score"
-        ] 
+          "The system combines the understanding from both readers.",
+          "It processes this combined information to output a final binding affinity score.",
+          "It also estimates how confident it is in that prediction."
+        ]
       },
     ],
   },
   {
     id: "prediction",
-    title: "Binding Prediction Module",
+    title: "Using the Prediction Module",
     icon: FlaskConical,
     content: [
-      "Users provide SMILES (drug) and FASTA (protein) inputs. The system returns predicted binding affinity in pK units with confidence scores. The AI-powered generator can also create SMILES/FASTA from drug/protein names.",
+      "The main feature of the app. You simply input the drug structure and protein sequence, and the AI does the rest.",
     ],
     subsections: [
-      { 
-        title: "Input Specifications", 
+      {
+        title: "Input Formats",
         content: [
-          "SMILES: Valid molecular notation (Simplified Molecular Input Line Entry System)",
-          "FASTA: 30-10,000 amino acids (single-letter code)",
-          "Validation: Automatic input checking with error feedback",
-          "AI Generator: Convert drug/protein names to SMILES/FASTA"
-        ] 
-      },
-      { 
-        title: "Output Interpretation", 
-        content: [
-          "pK ≥ 10: Exceptional Affinity (rare, highly optimized)",
-          "pK 9-10: Very High Affinity (excellent candidate)",
-          "pK 7-9: High Affinity (good lead compound)",
-          "pK 5-7: Moderate Affinity (needs optimization)",
-          "pK 3-5: Low Affinity (weak binder)",
-          "pK < 3: Negligible (not a viable candidate)"
-        ] 
+          "Drug Input: Requires 'SMILES' format (e.g., CC(=O)OC...). This is a standard way to write molecules as text.",
+          "Protein Input: Requires 'FASTA' format (sequence of letters representing amino acids).",
+          "Don't worry if you don't know them—our AI Assistant can generate them for you from common names!"
+        ]
       },
       {
-        title: "Confidence Score",
+        title: "Confidence Scores",
         content: [
-          ">90%: High confidence - prediction is reliable",
-          "70-90%: Moderate confidence - consider experimental validation",
-          "50-70%: Low confidence - treat as preliminary estimate",
-          "<50%: Very low confidence - high uncertainty in prediction"
+          "High Confidence (>90%): The model has seen similar examples and is very sure.",
+          "Medium Confidence (70-90%): Reliable for screening.",
+          "Low Confidence (<70%): Treat as a rough estimate. Experimental verification is recommended."
         ]
       }
     ],
   },
   {
     id: "explainability",
-    title: "Explainability Analysis",
+    title: "Explainability (Why did it predict this?)",
     icon: Brain,
     content: [
-      "SHAP (SHapley Additive exPlanations) values quantify each atom's contribution to the prediction. Attention weights from the Transformer highlight important protein residues near binding sites.",
-      "These explainability features help researchers understand WHY a prediction was made, not just what the prediction is, enabling rational drug design decisions.",
+      "AI shouldn't be a black box. We provide tools to see exactly why the model made a specific prediction.",
     ],
     subsections: [
-      { 
-        title: "SHAP Analysis (Drug Atoms)", 
+      {
+        title: "Atom Importance (SHAP)",
         content: [
-          "Each atom receives an importance score (0-100%)",
-          "High importance (>50%): Critical for binding - highlighted in red",
-          "Medium importance (30-50%): Contributes to binding - highlighted in yellow",
-          "Low importance (<30%): Minimal contribution - neutral color",
-          "Nitrogen and Oxygen atoms often show high importance (hydrogen bonding)",
-          "Aromatic carbons important for π-stacking interactions"
-        ] 
+          "We highlight correct atoms in the drug molecule that contributed most to the prediction.",
+          "Red/Hot colors mean that part of the molecule is driving the strong binding.",
+          "This helps chemists optimize the drug by keeping the 'good' parts and modifying the rest."
+        ]
       },
-      { 
-        title: "Attention Weights (Protein Residues)", 
+      {
+        title: "Protein Attention",
         content: [
-          "Residues with high attention (>60%) are predicted binding site residues",
-          "Charged residues (K, R, D, E) often show elevated attention",
-          "Aromatic residues (F, W, Y) important for hydrophobic interactions",
-          "Validation shows >70% overlap with experimentally determined binding regions"
-        ] 
-      },
-      { 
-        title: "3D Visualization", 
-        content: [
-          "Interactive rotation and zoom controls",
-          "Bond colors indicate predicted interaction strength",
-          "Green: Strong binding (pK >9)",
-          "Yellow: Moderate binding (pK 5-9)",
-          "Red: Weak binding (pK <5)",
-          "Hover for detailed atom/residue information"
-        ] 
-      },
-    ],
-  },
-  {
-    id: "performance",
-    title: "Model Performance",
-    icon: BarChart3,
-    content: [
-      "The deep learning model (GNN + Transformer) achieves Pearson R = 0.76 and RMSE = 1.07, representing a 25% improvement over the Random Forest baseline. The model also shows better calibration and tighter uncertainty estimates.",
-    ],
-    subsections: [
-      { 
-        title: "Baseline Model (Random Forest)", 
-        content: [
-          "Features: Morgan Fingerprints (2048-bit) + Protein descriptors",
-          "RMSE: 1.42 pK units",
-          "MAE: 1.08 pK units",
-          "Pearson R: 0.58",
-          "R-squared: 0.34"
-        ] 
-      },
-      { 
-        title: "Deep Learning Model (GNN + Transformer)", 
-        content: [
-          "Architecture: Graph Convolution + Self-Attention",
-          "RMSE: 1.07 pK units (25% improvement)",
-          "MAE: 0.82 pK units (24% improvement)",
-          "Pearson R: 0.76 (31% improvement)",
-          "R-squared: 0.58 (71% improvement)"
-        ] 
-      },
-      { 
-        title: "AutoDock Vina Comparison", 
-        content: [
-          "Structure-based docking was used for validation",
-          "Deep learning shows stronger correlation with experimental data",
-          "Model predictions are faster (milliseconds vs minutes for docking)",
-          "Applicable without 3D structure requirements"
-        ] 
-      },
+          "The model highlights specific amino acids in the protein chain.",
+          "These often correspond to the actual binding pocket where the drug attaches.",
+          "This confirms the model is looking at the biologically relevant areas."
+        ]
+      }
     ],
   },
   {
     id: "datasets",
-    title: "Training Datasets",
+    title: "Training Data",
     icon: Database,
     content: [
-      "The model was trained on BindingDB (100,000 curated samples) and validated on PDBbind (10,000 samples). Rigorous preprocessing ensured data quality including SMILES sanitization, sequence normalization, and pK unit unification.",
+      "Just like a student needs textbooks, our AI needs data to learn. We used the highest quality scientific datasets available.",
+      "The primary training source was BindingDB, a public database of measured binding affinities.",
+      "We strictly separated our data into Training (to teach), Validation (to tune), and Testing (to evaluate) sets to ensure honest performance metrics."
     ],
     subsections: [
-      { 
-        title: "BindingDB (Primary Training)", 
+      {
+        title: "BindingDB",
         content: [
-          "Total entries: 2.5M+ measured binding affinities",
-          "After filtering: 245,000 valid drug-protein pairs",
-          "Training samples: 100,000 after preprocessing",
-          "Affinity types: Kd, Ki, IC50 - unified to pK scale",
-          "Source: https://www.bindingdb.org/"
-        ] 
+          "Contains over 100,000 carefully curated drug-protein pairs.",
+          "Includes real experimental results from wet-lab experiments."
+        ]
       },
-      { 
-        title: "PDBbind (Validation)", 
+      {
+        title: "PDBbind",
         content: [
-          "Total complexes: 23,496 with experimental affinities",
-          "Filtered complexes: 19,443 with quality structures",
-          "Validation samples: 10,000 for held-out testing",
-          "Includes 3D co-crystal structures for docking validation",
-          "Source: http://pdbbind.org.cn/ and https://www.rcsb.org/"
-        ] 
-      },
-      { 
-        title: "Preprocessing Pipeline", 
-        content: [
-          "8-10% invalid SMILES removed via RDKit sanitization",
-          "Protein length filter: 30-10,000 amino acids",
-          "Affinity unit conversion: Kd, Ki, IC50 - pK",
-          "Duplicate removal and data deduplication",
-          "Random 80/10/10 train/validation/test split"
-        ] 
-      },
+          "A high-quality dataset used specifically for validating our results.",
+          "Contains 3D structures of complexes, allowing us to benchmark against geometry-based methods."
+        ]
+      }
     ],
   },
 ];
@@ -403,7 +287,7 @@ export default function Documentation() {
     // Sections
     documentationSections.forEach((section, i) => {
       checkNewPage(40);
-      
+
       // Section header
       doc.setFillColor(248, 250, 252);
       doc.roundedRect(15, yPos - 5, pageWidth - 30, 12, 2, 2, 'F');
@@ -413,7 +297,7 @@ export default function Documentation() {
       doc.text(`${i + 1}. ${section.title}`, 20, yPos + 3);
       doc.setTextColor(0, 0, 0);
       yPos += 15;
-      
+
       // Content
       doc.setFontSize(10);
       doc.setFont('helvetica', 'normal');
@@ -426,7 +310,7 @@ export default function Documentation() {
         });
         yPos += 3;
       });
-      
+
       // Subsections
       section.subsections?.forEach(sub => {
         checkNewPage(20);

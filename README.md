@@ -7,7 +7,7 @@
 
 > An advanced AI-powered platform for predicting drug-protein binding affinities using deep learning. Combines Graph Neural Networks (GNN) for molecular representation with Transformer architectures for protein sequence encoding.
 
-![DrugBind AI Banner](public/placeholder.svg)
+![DrugBind AI Banner](public/banner.svg)
 
 ## 🎯 Overview
 

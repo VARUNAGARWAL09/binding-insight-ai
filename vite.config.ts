@@ -11,6 +11,7 @@ export default defineConfig(({ mode }) => ({
       overlay: false,
     },
   },
+  base: "/binding-insight-ai/",
   plugins: [react()],
   resolve: {
     alias: {

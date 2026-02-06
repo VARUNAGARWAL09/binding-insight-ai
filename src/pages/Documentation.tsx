@@ -11,6 +11,7 @@ import {
   AlertCircle,
   Target,
   Activity,
+  History,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AppLayout } from "@/components/layout/AppLayout";
@@ -175,6 +176,76 @@ const documentationSections: DocSection[] = [
         ]
       }
     ],
+  },
+  {
+    id: "history",
+    title: "Prediction History & Analytics",
+    icon: History,
+    content: [
+      "Keep track of all your experiments. The History dashboard provides a comprehensive view of your past predictions, allowing you to monitor trends and manage your research data.",
+    ],
+    subsections: [
+      {
+        title: "Timeline View",
+        content: [
+          "Automatically saves every prediction (both single and batch).",
+          "Groups predictions by date (Today, Yesterday, Last Week).",
+          "Color-coded cards show pK values and confidence scores at a glance."
+        ]
+      },
+      {
+        title: "Analytics Dashboard",
+        content: [
+          "Visualizes your research progress over time.",
+          "pK Trend Chart: See how your candidate affinity is improving.",
+          "Source Distribution: Track single vs. batch processing volume.",
+          "Key Metrics: View total predictions and average confidence."
+        ]
+      },
+      {
+        title: "Data Management",
+        content: [
+          "Search: Instantly find past predictions by drug or protein name.",
+          "Favorites: Star important results for quick access.",
+          "Notes: Add personal annotations to any prediction.",
+          "Export: Download your entire history as a JSON file for backup."
+        ]
+      }
+    ]
+  },
+  {
+    id: "drug-likeness",
+    title: "Drug Likeness Calculator",
+    icon: FlaskConical,
+    content: [
+      "Before synthesis, it's crucial to know if a molecule has 'drug-like' properties. This module evaluates your candidate against established medicinal chemistry rules.",
+    ],
+    subsections: [
+      {
+        title: "Lipinski's Rule of Five",
+        content: [
+          "The gold standard for oral drug candidates.",
+          "Checks Molecular Weight (<500 Da), LogP (<5), Hydrogen Bond Donors (<5), and Acceptors (<10).",
+          "Helps predict if a drug can be absorbed by the human body."
+        ]
+      },
+      {
+        title: "Advanced Filters",
+        content: [
+          "Ghose Filter: Checks drug-likeness based on property ranges of known drugs (MW, LogP, MR, Atom count).",
+          "Veber's Rules: Evaluates oral bioavailability based on flexibility (Rotatable Bonds) and Polar Surface Area (TPSA)."
+        ]
+      },
+      {
+        title: "Visualization & Reports",
+        content: [
+          "Radar Chart: Visually compare 6 key molecular properties against ideal ranges.",
+          "QED Score: A single 'Quantitative Estimate of Drug-likeness' score (0-1).",
+          "ADMET Prediction: Estimates Absorption, Toxicity, and other pharmacokinetic properties.",
+          "PDF Report: Download a detailed analysis certification for your compound."
+        ]
+      }
+    ]
   },
   {
     id: "explainability",

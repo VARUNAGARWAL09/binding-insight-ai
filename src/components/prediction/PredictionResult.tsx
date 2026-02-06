@@ -228,7 +228,7 @@ export function PredictionResult({ result, smiles, fasta, onViewExplainability }
 
             {drugLikeness.violations.length > 0 && (
               <div className="text-xs text-muted-foreground mt-2">
-                <span className="font-medium text-warning">Lipinski Violations ({drugLikeness.lipinskiViolations}):</span>
+                <span className="font-medium text-warning">Violations ({drugLikeness.violations.length}):</span>
                 <span className="ml-1">{drugLikeness.violations.join(', ')}</span>
               </div>
             )}

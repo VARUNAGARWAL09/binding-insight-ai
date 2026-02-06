@@ -9,6 +9,7 @@ import { calculateDrugLikeness, DrugLikenessResult, getDrugLikenessColor } from 
 import { DrugLikenessRadar } from '@/components/drug-likeness/DrugLikenessRadar';
 import { AdmetCards } from '@/components/drug-likeness/AdmetCards';
 import { generateDrugLikenessPDF } from '@/lib/pdfGenerator';
+import { MoleculeGenerator } from '@/components/prediction/MoleculeGenerator';
 import { Search, FlaskConical, AlertTriangle, CheckCircle2, XCircle, Info, Download } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -75,6 +76,18 @@ export default function DrugLikeness() {
                             </p>
                         </div>
                     </div>
+                </div>
+
+                {/* AI Generator */}
+                <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 delay-150">
+                    <MoleculeGenerator
+                        mode="drug-only"
+                        onDrugGenerated={(generatedSmiles) => {
+                            setSmiles(generatedSmiles);
+                            // Optional: auto-evaluate? Or let user click evaluate.
+                            // Let's let user click evaluate to review the SMILES first.
+                        }}
+                    />
                 </div>
 
                 {/* Input Section */}
